@@ -1,0 +1,33 @@
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local config
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+*.hprof
+
+# Output APKs
+*.apk
+*.ap_
+
+# Caches and logs
+.cxx/
+.externalNativeBuild/
+captures/
+output.json
+
+# Generated files
+*.dex
+*.class
+
+# Crashlytics/Fabric
+crashlytics-build.properties
+
+# Others
+.DS_Store
