@@ -8,14 +8,13 @@
     android:padding="8dp"
     android:layout_marginBottom="16dp">
 
-    <!-- ImageView para mostrar la prenda -->
+    <!-- ImageView para mostrar la prenda, ahora ocupa todo el ancho -->
     <ImageView
         android:id="@+id/ivProductImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:contentDescription="Imagen de la Product"/>
+        android:contentDescription="Imagen de la prenda" />
 
     <!-- TextView para el nombre de la prenda -->
     <TextView
@@ -26,7 +25,7 @@
         android:textColor="@color/black"
         android:layout_marginTop="8dp"
         android:importantForAccessibility="yes"
-        android:contentDescription="Nombre de la prenda"/>
+        android:contentDescription="Nombre de la prenda" />
 
     <!-- TextView para el precio de la prenda -->
     <TextView
@@ -37,6 +36,6 @@
         android:textSize="14sp"
         android:layout_marginTop="4dp"
         android:importantForAccessibility="yes"
-        android:contentDescription="Precio de la prenda"/>
+        android:contentDescription="Precio de la prenda" />
 
 </LinearLayout>
