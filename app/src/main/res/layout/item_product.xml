@@ -8,7 +8,6 @@
     android:padding="8dp"
     android:layout_marginBottom="16dp">
 
-    <!-- ImageView para mostrar la prenda, ahora ocupa todo el ancho -->
     <ImageView
         android:id="@+id/ivProductImage"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:scaleType="centerCrop"
         android:contentDescription="Imagen de la prenda" />
 
-    <!-- TextView para el nombre de la prenda -->
     <TextView
         android:id="@+id/tvProductName"
         android:layout_width="wrap_content"
@@ -27,7 +25,6 @@
         android:importantForAccessibility="yes"
         android:contentDescription="Nombre de la prenda" />
 
-    <!-- TextView para el precio de la prenda -->
     <TextView
         android:id="@+id/tvProductPrice"
         android:layout_width="wrap_content"

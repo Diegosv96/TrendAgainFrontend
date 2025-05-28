@@ -12,7 +12,6 @@
         android:layout_above="@id/progressBar"
         android:layout_alignParentTop="true"/>
 
-    <!-- ProgressBar para mostrar carga mientras se obtienen las prendas -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
