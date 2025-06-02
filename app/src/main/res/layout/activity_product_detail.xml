@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen de la prenda" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:text="Nombre del producto" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="4dp"
+            android:text="$0.00" />
+
+        <TextView
+            android:id="@+id/tvDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Descripción del producto" />
+
+        <Button
+            android:id="@+id/btnComprar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comprar"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnFavorito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Favorito"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</ScrollView>
