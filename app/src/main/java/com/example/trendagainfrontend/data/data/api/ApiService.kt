@@ -27,8 +27,8 @@ interface ApiService {
     @POST("/favorites/add")
     suspend fun createFavorite(@Body favorite: Favorite): Response<Favorite>
 
-    @GET("users/getByEmail")
-    suspend fun getUserByEmail(@Query("email") email: String): Response<User>
+    @GET("users/getByUsername")
+    suspend fun getUserByUsername(@Query("username") username: String): Response<User>
 
     @GET("products/getById")
     suspend fun getProduct(@Query("id") id: Int): Response<Product>

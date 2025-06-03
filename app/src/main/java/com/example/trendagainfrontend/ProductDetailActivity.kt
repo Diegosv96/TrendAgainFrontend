@@ -35,7 +35,7 @@ class ProductDetailActivity : AppCompatActivity() {
         val btnFavorito: Button = findViewById(R.id.btnFavorito)
 
         val sharedPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val userEmail: String = sharedPrefs.getString("user_email", "").toString()
+        val userName: String = sharedPrefs.getString("user_name", "").toString()
 
         // 2. Botón ATRÁS
         btnBack.setOnClickListener {
@@ -60,13 +60,10 @@ class ProductDetailActivity : AppCompatActivity() {
             .centerCrop()
             .into(ivImagen)
 
-
-
-
         // 6. Comprar
         btnComprar.setOnClickListener {
             lifecycleScope.launch {
-                val usuario = obtenerUsuarioActual(userEmail)
+                val usuario = obtenerUsuarioActual(userName)
                 val producto = obtenerProductActual(productId)
 
                 if (usuario != null && producto != null) {
@@ -86,7 +83,7 @@ class ProductDetailActivity : AppCompatActivity() {
         // 7. Marcar como favorito
         btnFavorito.setOnClickListener {
             lifecycleScope.launch {
-                val usuario = obtenerUsuarioActual(userEmail)
+                val usuario = obtenerUsuarioActual(userName)
                 val producto = obtenerProductActual(productId)
 
                 if (usuario != null && producto != null) {
@@ -103,9 +100,9 @@ class ProductDetailActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun obtenerUsuarioActual(email: String): User? {
+    suspend fun obtenerUsuarioActual(name: String): User? {
         return try {
-            val response = RetrofitClient.apiService.getUserByEmail(email)
+            val response = RetrofitClient.apiService.getUserByUsername(name)
             if (response.isSuccessful) {
                 response.body()
             } else null

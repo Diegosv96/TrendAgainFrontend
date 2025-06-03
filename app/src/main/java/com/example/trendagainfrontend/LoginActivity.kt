@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "¡Login correcto!", Toast.LENGTH_SHORT).show()
 
                     val sharedPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-                    sharedPrefs.edit().putString("user_email", username).apply()
+                    sharedPrefs.edit().putString("user_name", username).apply()
 
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
