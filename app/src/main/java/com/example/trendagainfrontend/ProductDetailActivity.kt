@@ -1,27 +1,32 @@
-// ProductDetailActivity.kt
 package com.example.trendagainfrontend
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.io.IOException
+import com.example.trendagainfrontend.data.data.api.RetrofitClient
+import com.example.trendagainfrontend.data.data.model.Category
+import com.example.trendagainfrontend.data.data.model.Favorite
+import com.example.trendagainfrontend.data.data.model.Product
+import com.example.trendagainfrontend.data.data.model.ProductImage
+import com.example.trendagainfrontend.data.data.model.Transaction
+import com.example.trendagainfrontend.data.data.model.User
+import kotlinx.coroutines.launch
+import java.util.Date
 
 class ProductDetailActivity : AppCompatActivity() {
-
-    // Cambia esto por la URL base de tu servidor, por ejemplo "http://192.168.1.10:8080"
-    private val BASE_URL = "http://10.0.2.2:8080/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
 
-        // 1. Obtener vistas del layout
+        // 1. Referencias UI
+        val btnBack: Button = findViewById(R.id.btnBack)
         val ivImagen: ImageView = findViewById(R.id.ivThumbnail)
         val tvNombre: TextView = findViewById(R.id.tvName)
         val tvPrecio: TextView = findViewById(R.id.tvPrice)
@@ -29,123 +34,164 @@ class ProductDetailActivity : AppCompatActivity() {
         val btnComprar: Button = findViewById(R.id.btnComprar)
         val btnFavorito: Button = findViewById(R.id.btnFavorito)
 
-        // 2. Leer datos que envió el Adapter
+        val sharedPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val userEmail: String = sharedPrefs.getString("user_email", "").toString()
+
+        // 2. Botón ATRÁS
+        btnBack.setOnClickListener {
+            finish()
+        }
+
+        // 3. Leer datos del Intent
         val productId = intent.getIntExtra("product_id", -1)
         val productName = intent.getStringExtra("product_name") ?: ""
         val productPrice = intent.getDoubleExtra("product_price", 0.0)
         val productDescription = intent.getStringExtra("product_description") ?: ""
         val productImageUrl = intent.getStringExtra("product_image_url") ?: ""
 
-        // 3. Mostrar datos en pantalla
+        // 4. Mostrar datos en pantalla
         tvNombre.text = productName
-        tvPrecio.text = String.format("$%.2f", productPrice)
+        tvPrecio.text = "€${"%.2f".format(productPrice)}"
         tvDescripcion.text = productDescription
 
-        // 4. Cargar imagen con Glide
+        // 5. Cargar imagen con Glide
         Glide.with(this)
             .load(productImageUrl)
             .centerCrop()
             .into(ivImagen)
 
-        // 5. Configurar botón Comprar
+
+
+
+        // 6. Comprar
         btnComprar.setOnClickListener {
-            if (productId != -1) {
-                registrarCompra(productId)
-            } else {
-                Toast.makeText(this, "ID de producto inválido", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                val usuario = obtenerUsuarioActual(userEmail)
+                val producto = obtenerProductActual(productId)
+
+                if (usuario != null && producto != null) {
+                    val transaction = Transaction(
+                        buyer = usuario,
+                        product = producto,
+                        amount = productPrice,
+                        transactionDate = Date()
+                    )
+                    comprar(transaction)
+                } else {
+                    Toast.makeText(this@ProductDetailActivity, "No se pudo obtener usuario o producto", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
-        // 6. Configurar botón Favorito
+        // 7. Marcar como favorito
         btnFavorito.setOnClickListener {
-            if (productId != -1) {
-                marcarComoFavorito(productId)
-            } else {
-                Toast.makeText(this, "ID de producto inválido", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                val usuario = obtenerUsuarioActual(userEmail)
+                val producto = obtenerProductActual(productId)
+
+                if (usuario != null && producto != null) {
+                    val favorite = Favorite(
+                        user = usuario,
+                        product = producto,
+                        createdAt = Date()
+                    )
+                    marcarComoFavorito(favorite)
+                } else {
+                    Toast.makeText(this@ProductDetailActivity, "No se pudo obtener usuario o producto", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    // Función para realizar la petición HTTP POST que crea una transacción de compra
-    private fun registrarCompra(productId: Int) {
-        val client = OkHttpClient()
-        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
-        val jsonBody = """
-            {
-              "productId": $productId
-            }
-        """.trimIndent()
-
-        val requestBody = RequestBody.create(mediaType, jsonBody)
-        val request = Request.Builder()
-            .url("$BASE_URL/transactions/add")
-            .post(requestBody)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                // Error de red o servidor inaccesible
-                runOnUiThread {
-                    Toast.makeText(this@ProductDetailActivity,
-                        "Error al registrar compra", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    runOnUiThread {
-                        Toast.makeText(this@ProductDetailActivity,
-                            "Compra registrada con éxito", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(this@ProductDetailActivity,
-                            "Fallo al registrar compra", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                response.close()
-            }
-        })
+    suspend fun obtenerUsuarioActual(email: String): User? {
+        return try {
+            val response = RetrofitClient.apiService.getUserByEmail(email)
+            if (response.isSuccessful) {
+                response.body()
+            } else null
+        } catch (e: Exception) {
+            Toast.makeText(
+                this@ProductDetailActivity,
+                "Error al obtener usuario: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+            null
+        }
     }
 
-    // Función para realizar la petición HTTP POST que marca el producto como favorito
-    private fun marcarComoFavorito(productId: Int) {
-        val client = OkHttpClient()
-        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
-        val jsonBody = """
-            {
-              "productId": $productId
-            }
-        """.trimIndent()
+    suspend fun obtenerProductActual(productId: Int): Product? {
+        return try {
+            val response = RetrofitClient.apiService.getProduct(productId)
+            if (response.isSuccessful) {
+                response.body()
+            } else null
+        } catch (e: Exception) {
+            Toast.makeText(
+                this@ProductDetailActivity,
+                "Error al obtener producto: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+            null
+        }
+    }
 
-        val requestBody = RequestBody.create(mediaType, jsonBody)
-        val request = Request.Builder()
-            .url("$BASE_URL/favorites/add")
-            .post(requestBody)
-            .build()
+    private fun comprar(transaction : Transaction) {
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    Toast.makeText(this@ProductDetailActivity,
-                        "Error al marcar favorito", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.apiService.createTransaction(transaction)
                 if (response.isSuccessful) {
-                    runOnUiThread {
-                        Toast.makeText(this@ProductDetailActivity,
-                            "Producto marcado como favorito", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(
+                        this@ProductDetailActivity,
+                        "¡Compra realizada con éxito!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(Intent(this@ProductDetailActivity, MainActivity::class.java))
+                    finish()
                 } else {
-                    runOnUiThread {
-                        Toast.makeText(this@ProductDetailActivity,
-                            "Fallo al marcar favorito", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(
+                        this@ProductDetailActivity,
+                        "Error al comprar: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                response.close()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@ProductDetailActivity,
+                    "Error en la petición: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        })
+        }
+    }
+
+    private fun marcarComoFavorito(favorite : Favorite) {
+
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.apiService.createFavorite(favorite)
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this@ProductDetailActivity,
+                        "¡Producto marcado como favorito!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(Intent(this@ProductDetailActivity, MainActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@ProductDetailActivity,
+                        "Error al marcar favorito: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@ProductDetailActivity,
+                    "Error en la petición: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }

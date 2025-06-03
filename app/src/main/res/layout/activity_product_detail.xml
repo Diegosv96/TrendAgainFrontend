@@ -3,12 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Contenedor principal a pantalla completa y con gravity="center" -->
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="16dp">
 
+        <!-- Imagen del producto -->
         <ImageView
             android:id="@+id/ivThumbnail"
             android:layout_width="match_parent"
@@ -16,6 +19,7 @@
             android:scaleType="centerCrop"
             android:contentDescription="Imagen de la prenda" />
 
+        <!-- Nombre -->
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
@@ -25,6 +29,7 @@
             android:paddingTop="8dp"
             android:text="Nombre del producto" />
 
+        <!-- Precio -->
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
@@ -33,6 +38,7 @@
             android:paddingTop="4dp"
             android:text="$0.00" />
 
+        <!-- Descripción -->
         <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="match_parent"
@@ -40,19 +46,41 @@
             android:paddingTop="8dp"
             android:text="Descripción del producto" />
 
-        <Button
-            android:id="@+id/btnComprar"
+        <!-- Contenedor HORIZONTAL para los dos botones -->
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comprar"
-            android:layout_marginTop="16dp" />
+            android:gravity="center"
+            android:layout_marginTop="16dp">
 
+            <!-- Botón Favorito -->
+            <Button
+                android:id="@+id/btnFavorito"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Favorito"
+                android:layout_marginStart="8dp" />
+
+            <!-- Botón Comprar -->
+            <Button
+                android:id="@+id/btnComprar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Comprar"
+                android:layout_marginEnd="8dp" />
+
+        </LinearLayout>
+
+        <!-- Botón Atrás debajo de los otros botones -->
         <Button
-            android:id="@+id/btnFavorito"
-            android:layout_width="match_parent"
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Favorito"
-            android:layout_marginTop="8dp" />
+            android:text="Atrás"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 </ScrollView>
