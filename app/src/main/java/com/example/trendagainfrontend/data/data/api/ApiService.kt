@@ -31,6 +31,6 @@ interface ApiService {
     suspend fun getUserByUsername(@Query("username") username: String): Response<User>
 
     @GET("products/getById")
-    suspend fun getProduct(@Query("id") id: Int): Response<Product>
+    suspend fun getProduct(@Query("productId") productId: Int): Response<Product>
 
 }

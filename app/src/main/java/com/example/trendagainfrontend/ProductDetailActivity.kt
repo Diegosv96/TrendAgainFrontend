@@ -17,7 +17,10 @@ import com.example.trendagainfrontend.data.data.model.ProductImage
 import com.example.trendagainfrontend.data.data.model.Transaction
 import com.example.trendagainfrontend.data.data.model.User
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class ProductDetailActivity : AppCompatActivity() {
 
@@ -60,6 +63,11 @@ class ProductDetailActivity : AppCompatActivity() {
             .centerCrop()
             .into(ivImagen)
 
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val now = Date()
+        val formattedDate = dateFormat.format(now)
+
         // 6. Comprar
         btnComprar.setOnClickListener {
             lifecycleScope.launch {
@@ -71,7 +79,7 @@ class ProductDetailActivity : AppCompatActivity() {
                         buyer = usuario,
                         product = producto,
                         amount = productPrice,
-                        transactionDate = Date()
+                        transactionDate = formattedDate
                     )
                     comprar(transaction)
                 } else {
@@ -90,7 +98,7 @@ class ProductDetailActivity : AppCompatActivity() {
                     val favorite = Favorite(
                         user = usuario,
                         product = producto,
-                        createdAt = Date()
+                        createdAt = formattedDate
                     )
                     marcarComoFavorito(favorite)
                 } else {

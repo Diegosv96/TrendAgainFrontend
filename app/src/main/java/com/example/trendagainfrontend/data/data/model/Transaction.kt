@@ -6,5 +6,5 @@ data class Transaction(
     val buyer: User,
     val product: Product,
     val amount: Double,
-    val transactionDate: Date?
+    val transactionDate: String?
 )

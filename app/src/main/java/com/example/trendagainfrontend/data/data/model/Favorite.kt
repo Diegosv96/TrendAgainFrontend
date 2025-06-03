@@ -5,5 +5,5 @@ import java.util.Date
 data class Favorite(
     val user: User,
     val product: Product,
-    val createdAt: Date?
+    val createdAt: String?
 )

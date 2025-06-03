@@ -10,6 +10,6 @@ data class Product(
     val description: String?,
     val price: Double,
     val category: Category?,
-    val createdAt: Date?,
-    val updatedAt: Date?
+    val createdAt: String?,
+    val updatedAt: String?
 )

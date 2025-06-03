@@ -9,7 +9,7 @@ data class User(
     val passwordHash: String,
     val firstName: String?,
     val lastName: String?,
-    val dateOfBirth: Date?,
-    val createdAt: Date?,
-    val updatedAt: Date?
+    val dateOfBirth: String?,
+    val createdAt: String?,
+    val updatedAt: String?
 )
