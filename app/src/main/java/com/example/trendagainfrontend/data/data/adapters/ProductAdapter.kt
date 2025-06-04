@@ -1,7 +1,9 @@
 // src/main/java/com/example/trendagainfrontend/data/data/adapters/ProductAdapter.kt
 package com.example.trendagainfrontend.data.data.adapters
 
+
 import android.content.Context
+
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.example.trendagainfrontend.ProductDetailActivity
 import com.example.trendagainfrontend.data.data.model.Product
 import com.example.trendagainfrontend.databinding.ItemProductBinding
+import com.example.trendagainfrontend.ProductDetailActivity
+
 
 class ProductAdapter(
     private val context: Context,          // <-- Inyectamos el Context

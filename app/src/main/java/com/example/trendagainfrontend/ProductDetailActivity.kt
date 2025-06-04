@@ -1,5 +1,6 @@
 package com.example.trendagainfrontend
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.trendagainfrontend.data.data.api.RetrofitClient
@@ -23,6 +25,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 class ProductDetailActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
