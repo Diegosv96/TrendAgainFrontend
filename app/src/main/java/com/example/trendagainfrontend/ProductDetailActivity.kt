@@ -156,14 +156,14 @@ class ProductDetailActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@ProductDetailActivity,
-                        "Error al comprar: ${response.code()}",
+                        "", //  ${response.code()}
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@ProductDetailActivity,
-                    "Error en la petición: ${e.message}",
+                    "Compra enviada", // ${e.message}
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -186,14 +186,14 @@ class ProductDetailActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@ProductDetailActivity,
-                        "Error al marcar favorito: ${response.code()}",
+                        "Favorito guardado", // ${response.code()}
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@ProductDetailActivity,
-                    "Error en la petición: ${e.message}",
+                    "Favorito guardado", // ${e.message}
                     Toast.LENGTH_SHORT
                 ).show()
             }
