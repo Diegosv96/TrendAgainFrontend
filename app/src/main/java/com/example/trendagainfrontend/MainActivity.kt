@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val products = response.body() ?: emptyList()
-                    recyclerView.adapter = ProductAdapter(products)
+                    recyclerView.adapter = ProductAdapter(this@MainActivity, products)
                 } else {
                     Toast.makeText(this@MainActivity, "Error al cargar los productos", Toast.LENGTH_SHORT).show()
                 }

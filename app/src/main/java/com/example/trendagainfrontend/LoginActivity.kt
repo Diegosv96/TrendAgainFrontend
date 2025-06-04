@@ -41,8 +41,11 @@ class LoginActivity : AppCompatActivity() {
                 )
 
                 if (response.isSuccessful) {
-                    // Suponiendo que si es correcto, vuelves a MainActivity
                     Toast.makeText(this@LoginActivity, "¡Login correcto!", Toast.LENGTH_SHORT).show()
+
+                    val sharedPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    sharedPrefs.edit().putString("user_name", username).apply()
+
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 } else {
